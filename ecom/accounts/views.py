@@ -35,6 +35,9 @@ def register(request):
             elif not username.strip():
                 messages.error(request, 'The username is not valid')
                 return redirect('register')
+            if not all([username, email, password1, password2]):
+                messages.error(request,'please fill up all the fields.')
+                return redirect('register')
             elif User.objects.filter(username=username).exists():
                 messages.error(request, 'The username is already taken')
                 return redirect('register')
@@ -133,7 +136,9 @@ def otp(request):
             if str(entered_otp) == str(stored_otp):
                 user = User.objects.create_user(username=user_data['username'], first_name=user_data['first_name'], last_name=user_data['last_name'], email=user_data['email'], password=user_data['password'])
                 user.save()
+                print(user)
                 del request.session['user_data']
+                print('data_deleted')
                 return redirect('login')
             else:
                 messages.error(request, 'Invalid OTP, try again.')
@@ -146,25 +151,21 @@ def otp(request):
 
 @never_cache
 def log_in(request):
-
     if request.user.is_authenticated:
         return redirect('index')
-      
     if request.method == "POST":
-        email = request.POST.get('email')
-        print(email)
+        username = request.POST.get('username')
+        print(username)
         password = request.POST.get('password')
         print(password)
-            
-        user = auth.authenticate(email = email , password = password)
-        print(user)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
+        ext_user = authenticate(request, username = username ,password = password )
+        print(ext_user)
+        if ext_user is not None:
+            auth.login(request, ext_user)
+            return redirect(index)
         else:
             messages.error(request,'The email or password is incorrect.')
             return redirect('login')
-
     return render(request, 'log.html')
 
 
@@ -175,6 +176,7 @@ def log_out(request):
 
 def index(request):
     if request.user.is_authenticated:
-        context = {'username' : request.user.username}
+        first_name_capitalized = request.user.first_name.title()
+        context = {'username': first_name_capitalized}
         return render(request, 'index.html', context)
     return render(request, 'index.html')
