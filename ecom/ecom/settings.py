@@ -172,3 +172,11 @@ EMAIL_HOST_USER = 'meliotis100@gmail.com'
 EMAIL_HOST_PASSWORD = 'edeh tvnt rrzm gapy'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1005927072035-1t1638hjkff9ah7v4gd08g2ab74nq583.apps.googleusercontent.com"  
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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" 
+
+ALLOWED_REDIRECT_URIS = [
+    'http://127.0.0.1:8000/accounts/google/login/callback/',
+    'http://127.0.0.1:8000/accounts/google/login/callback/',
+]

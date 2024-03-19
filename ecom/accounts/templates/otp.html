@@ -19,6 +19,7 @@
                     width: 599px;
                     height: 695px;
                 }
+
                 .col-lg-6 {
                     -ms-flex: 0 0 50%;
                     flex: 0 0 50%;
@@ -114,11 +115,10 @@
                     border-radius: 10px;
                     color: #fff;
                     display: flex;
-                    justify-content: center; 
-                    align-items: center; 
+                    justify-content: center;
+                    align-items: center;
                     margin-top: 54px;
                 }
-}
 
                 .otp-inputs {
                     display: flex;
@@ -126,6 +126,7 @@
                     justify-content: space-evenly;
                     gap: 26px;
                 }
+
                 .img-fluid {
                     max-width: 100%;
                     height: auto;
@@ -151,13 +152,14 @@
                     .submit-button {
                         padding: 0 20px;
                     }
+
                     .action-prompt a {
                         color: #007bff;
                         text-decoration: none;
                         background-color: transparent;
                         font-size: large !important;
                     }
-                    
+
                 }
             </style>
 
@@ -167,51 +169,48 @@
                         alt="" />
                 </div>
                 <h2 class="otp-title">OTP Verification</h2>
-                <p class="email-description">We Will send you a one time password on the <span
+                <p class="email-description">We Will send you a one time password on the<span
                         style="font-family: Anek Tamil, sans-serif;">email</span></p>
 
                 <p class="email-display">{{email}}</p>
                 <form action="{% url 'my_otp' %}" method="post">
                     {% csrf_token %}
                     <div class="container mb-3 d-flex justify-content-between  align-items-center py-4">
-                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit1" maxlength="1" required autofocus />
-                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit2" maxlength="1" required />
-                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit3" maxlength="1" required />
-                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit4" maxlength="1" required />
-                      </div>
-                      <div class="timer" id="timer">02:00</div>
+                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit1"
+                            maxlength="1" required autofocus />
+                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit2"
+                            maxlength="1" required />
+                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit3"
+                            maxlength="1" required />
+                        <input type="text" autocomplete="off" class="form-control text-center otp-input" name="digit4"
+                            maxlength="1" required />
+                    </div>
+                    <div class="timer" id="timer">02:00</div>
 
                     <div class="actions">
-                       <div class="action-prompt"> <a href="">Do not get OTP?</a></div>
-                        
-
+                        <div class="action-prompt"> <a href="{% url 'resend_otp' %}">Didn't not get OTP?</a></div>
                     </div>
                     <div class="d-flex justify-content-center mt-4"> <!-- Add this container around the button -->
                         <button type='submit' class="submit-button">
                             <div class="btn"><a href="">Submit</a></div>
                         </button>
                     </div>
-                    
                     <br>
-
                     {% if messages %}
-    <div class="messages text-center text-capitalize font-weight-bold">
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-                <h5 class="text-danger">! {{ message }}</h5>
-            {% elif message.tags == 'success' %}
-                <h5 class="text-success">! {{ message }}</h5>
-            {% else %}
-                <h5>! {{ message }}</h5>
-            {% endif %}
-        {% endfor %}
-    </div>
-{% endif %}
+                    <div class="messages text-center text-capitalize font-weight-bold">
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <h5 class="text-danger">! {{ message }}</h5>
+                        {% elif message.tags == 'success' %}
+                        <h5 class="text-success">! {{ message }}</h5>
+                        {% else %}
+                        <h5>! {{ message }}</h5>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </form>
             </section>
-
-
-
         </div>
     </div>
 
@@ -220,8 +219,9 @@
             background-color: #d9d9d9;
             padding: 50px;
         }
-        .btn a{
-            color:white !important;
+
+        .btn a {
+            color: white !important;
         }
         h5 {
             margin: 0;
@@ -229,145 +229,129 @@
             font-weight: 400;
             font-family: "Montserrat", sans-serif;
 
-        .forgot-password-link a {
-            color: #f8a435;
-            font-size: 14px;
-        }
+            .forgot-password-link a {
+                color: #f8a435;
+                font-size: 14px;
+            }
 
-        .forgot-password-link a:hover {
-            color: #007bff;
-            text-decoration: none;
-        }
+            .forgot-password-link a:hover {
+                color: #007bff;
+                text-decoration: none;
+            }
 
-        .form-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-            width: 610px;
-            height: 630px;
-        }
+            .form-container {
+                background-color: #fff;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+                width: 610px;
+                height: 630px;
+            }
 
-        .welcome-msg {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+            .welcome-msg {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
 
-        .signup-msg {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
+            .signup-msg {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+            .form-group {
+                margin-bottom: 20px;
+            }
 
-        .form-group label {
-            font-weight: bold;
-        }
+            .form-group label {
+                font-weight: bold;
+            }
 
-        .btn-primary {
-            background-color: #f8a435;
-            border-color: #f8a435;
-        }
+            .btn-primary {
+                background-color: #f8a435;
+                border-color: #f8a435;
+            }
 
-        .btn-primary:hover {
-            background-color: #f6871f;
-            border-color: #f6871f;
-        }
+            .btn-primary:hover {
+                background-color: #f6871f;
+                border-color: #f6871f;
+            }
 
-        .sign-in-link {
-            color: #4045c8;
-            font-weight: bold;
-        }
+            .sign-in-link {
+                color: #4045c8;
+                font-weight: bold;
+            }
 
-        .img-fluid {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-top: 18px;
-        }
-
-        .col-lg-6 {
-            display: contents;
-            margin-left: 100px !important;
-        }
-        .row {
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-            margin-right: -15px;
-            justify-content: center;
-        }
-
-        @media (max-width: 992px) {
-            .container-fluid {
-                padding: 20px;
+            .img-fluid {
+                max-width: 100%;
+                height: auto;
+                border-radius: 10px;
+                margin-top: 18px;
             }
 
             .col-lg-6 {
-                max-width: 100%;
+                display: contents;
+                margin-left: 100px !important;
             }
-
-
-            .img-fluid {
-                margin-top: 20px;
+            .row {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                margin-right: -15px;
+                justify-content: center;
             }
-            
-
-        }
+            @media (max-width: 992px) {
+                .container-fluid {
+                    padding: 20px;
+                }
+                .col-lg-6 {
+                    max-width: 100%;
+                }
+                .img-fluid {
+                    margin-top: 20px;
+                }
+            }
     </style>
-<script>
-    const timerDuration = 120; // Duration of the timer in seconds
-
-    // Function to format time (convert seconds to MM:SS format)
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-    }
-
-    // Function to update the timer
-    function updateTimer() {
-        const timerElement = document.getElementById('timer');
-        let remainingTime;
-
-        // Check if timer state exists in local storage for the current user
-        const userId = '{{ request.session.session_key }}'; // Unique identifier for the user
-        const timerState = localStorage.getItem(`timerState_${userId}`);
-        
-        if (timerState) {
-            remainingTime = parseInt(timerState);
-        } else {
-            remainingTime = timerDuration;
+    <script>
+        const timerDuration = 120; // Duration of the timer in seconds
+        // Function to format time (convert seconds to MM:SS format)
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+        // Function to update the timer
+        function updateTimer() {
+            const timerElement = document.getElementById('timer');
+            let remainingTime;
+            // Check if timer state exists in local storage for the current user
+            const userId = '{{ request.session.session_key }}'; // Unique identifier for the user
+            const timerState = localStorage.getItem(`timerState_${userId}`);
+            if (timerState) {
+                remainingTime = parseInt(timerState);
+            } else {
+                remainingTime = timerDuration;
+            }
+            // Update the timer every second
+            const timerInterval = setInterval(() => {
+                timerElement.textContent = formatTime(remainingTime);
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = '00:00'; // Timer reached zero
+                    // Handle timer expiration here
+                } else {
+                    remainingTime -= 1;
+                    // Store remaining time in local storage for the current user
+                    localStorage.setItem(`timerState_${userId}`, remainingTime);
+                }
+            }, 1000);
+            // Remove timer state from local storage when the user navigates away from the OTP verification page
+            window.addEventListener('beforeunload', () => {
+                localStorage.removeItem(`timerState_${userId}`);
+            });
         }
 
-        // Update the timer every second
-        const timerInterval = setInterval(() => {
-            timerElement.textContent = formatTime(remainingTime);
-
-            if (remainingTime <= 0) {
-                clearInterval(timerInterval);
-                timerElement.textContent = '00:00'; // Timer reached zero
-                // Handle timer expiration here
-            } else {
-                remainingTime -= 1;
-                // Store remaining time in local storage for the current user
-                localStorage.setItem(`timerState_${userId}`, remainingTime);
-            }
-        }, 1000);
-
-        // Remove timer state from local storage when the user navigates away from the OTP verification page
-        window.addEventListener('beforeunload', () => {
-            localStorage.removeItem(`timerState_${userId}`);
-        });
-    }
-
-    // Call the function to start or resume the timer
-    updateTimer();
-</script>
-
-    
+        updateTimer();
+    </script>
     {% endblock content %}

@@ -21,14 +21,20 @@ def register(request):
         
         if request.method == 'POST':
             first_name = request.POST.get('f_name')
-            last_name = request.POST.get('l_name')
-            username = request.POST.get('username') 
-            email = request.POST.get('email')
-            password1 = request.POST.get('pass1')
-            password2 = request.POST.get('pass2')
+            last_name  = request.POST.get('l_name')
+            username   = request.POST.get('username') 
+            email      = request.POST.get('email')
+            password1  = request.POST.get('pass1')
+            password2  = request.POST.get('pass2')
             print(first_name)
             print(password1)
             
+            if not all([first_name, last_name, username, email, password1, password2]):
+                messages.error(request,'Please fill up all the fields.')
+                return redirect('register')
+            elif User.objects.filter(username=username).exists():
+                messages.error(request, 'The username is already taken')
+                return redirect('register')
             if not username:
                 messages.error(request, 'Please provide a username')
                 return redirect('register')
@@ -72,32 +78,11 @@ def register(request):
             elif User.objects.filter(email=email).exists():
                 messages.error(request, 'This email is already registered')
                 return redirect('register')
-
-            otp = random.randint(1000, 9999)
+            
+            otp,otp_generated_at = generate_otp_and_send_email(email)
             print(otp)
-            otp_generated_at = timezone.now().isoformat()
-
-            request.session['user_data'] = {
-                'first_name': first_name,
-                'last_name': last_name,
-                'username': username,  
-                'email': email,
-                'password': password1,
-                'otp': otp,
-                'otp_generated_at' : otp_generated_at
-                
-                
-            }
-            print('session created')
-
-            send_mail(
-                subject='Your OTP for verification',
-                message=f'Your OTP for verification is: {otp}',
-                from_email=EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=True
-            )
-            print('send email successful')
+            store_user_data_in_session(request, first_name, last_name, username, email, password1, otp,otp_generated_at)
+            print('session created successful')
             messages.success(request, f'Welcome {first_name}')
             return redirect('my_otp')
         else:
@@ -105,6 +90,34 @@ def register(request):
     except ValidationError as e:
         messages.error(request, ', '.join(e))
         return redirect('register')
+
+
+
+def generate_otp_and_send_email(email):
+    otp = random.randint(1000, 9999)
+    otp_generated_at = timezone.now().isoformat()
+
+    send_mail(
+        subject='Your OTP for verification',
+        message=f'Your OTP for verification is: {otp}',
+        from_email=EMAIL_HOST_USER,
+        recipient_list=[email],
+        fail_silently=True
+    )
+    return otp, otp_generated_at
+def store_user_data_in_session(request, first_name, last_name, username, email, password, otp, otp_generated_at):
+    request.session['user_data'] = {
+        'first_name': first_name,
+        'last_name': last_name,
+        'username': username,
+        'email': email,
+        'password': password,
+        'otp': otp,
+        'otp_generated_at': otp_generated_at
+    }
+
+    
+
 
 @never_cache
 def otp(request):
@@ -118,7 +131,7 @@ def otp(request):
 
             if None in otp_digits:
                 messages.error(request, 'Invalid OTP format, please try again.')
-                return redirect('log_in')
+                return redirect('my_otp')
             
             entered_otp = int(''.join(otp_digits))
             stored_otp = request.session.get('user_data', {}).get('otp')
@@ -148,6 +161,21 @@ def otp(request):
     except Exception as e:
         messages.error(request, str(e))
         return redirect('register')
+    
+def resend_otp(request):
+    try:
+        user_data = request.session.get('user_data', {})
+        email = user_data.get('email', '')
+        
+        otp = generate_otp_and_send_email(email)
+        request.session['user_data']['otp'] = otp
+        print(otp)
+        
+        messages.success(request, 'otp resend successful')
+        return redirect('my_otp')
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('my_otp')
 
 @never_cache
 def log_in(request):
@@ -168,7 +196,8 @@ def log_in(request):
             return redirect('login')
     return render(request, 'log.html')
 
-
+def reset_password(request):
+    return render(request, 'log.html')
 
 def log_out(request):
     logout(request)

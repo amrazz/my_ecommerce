@@ -7,6 +7,103 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
   integrity="sha384-dZJphvWB4gBFHqhDyv4m3D7cycoqj/ZxVBbsKsW9ec9CSJ0+Emlwj8bs3iyCegQj" crossorigin="anonymous" />
 
+
+<!-- reset password email Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title text-center" id="exampleModalLongTitle" >Reset Password</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex justify-content-center "> 
+        <form action="{% url 'reset_pass' %}" method="post">
+          <label for="">Enter Email</label>
+          <input type="email" name="email" placeholder="" class="d-flex justify-content-center ">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary tect-center" data-toggle="modal" data-target="#exampleModalCenter1" aria-label="Close" data-dismiss="modal">Send otp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- otp verification Modal -->
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-block ">
+        <h5 class="modal-title text-bg-primary  " id="exampleModalLongTitle">OTP Verification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'reset_pass' %}" method="post">
+          <p class="d-flex justify-content-center ">4 digit verification code sent to your email</p>
+          <br>
+
+          <div class="container mb-3 d-flex justify-content-between  align-items-center py-4">
+            <input type="text" autocomplete="off" class="form-control text-center otp-input rounded " name="one"
+                maxlength="1" required autofocus />
+            <input type="text" autocomplete="off" class="form-control text-center otp-input" name="two"
+                maxlength="1" required />
+            <input type="text" autocomplete="off" class="form-control text-center otp-input" name="three"
+                maxlength="1" required />
+            <input type="text" autocomplete="off" class="form-control text-center otp-input" name="four"
+                maxlength="1" required />
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2" aria-label="Close" data-dismiss="modal">Send otp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- reset password Modal -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Reset password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'reset_pass' %}" method="post">
+          <div class="form-group d-flex justify-content-between align-items-center">
+            <label for="password"><i class="fa fa-lock"></i>New Password</label>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" name="new_password" placeholder="Enter a password"
+              required />
+          </div>
+          <div class="form-group d-flex justify-content-between align-items-center">
+            <label for="password"><i class="fa fa-lock"></i>Confirm Password</label>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" name="confirm_password" placeholder="Enter a password"
+              required />
+          </div>
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="{% url 'login' %}"><button type="button"  role="submit" class="btn btn-primary">Confirm</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-6">
@@ -16,9 +113,11 @@
 
         <form action="{% url 'login' %}" method="post">
           {% csrf_token %}
+
+
           <div class="form-group">
             <label for="username"><i class="fa fa-user"></i>
-            </i> Username</label>
+              </i> Username</label>
             <input type="text" class="form-control" id="username" placeholder="Enter a username" name="username"
               required />
           </div>
@@ -26,7 +125,7 @@
           <div class="form-group d-flex justify-content-between align-items-center">
             <label for="password"><i class="fa fa-lock"></i> Password</label>
             <div class="forgot-password-link">
-              <a href="#">Forgot Password?</a>
+              <a href="#" data-toggle="modal" data-target="#exampleModalCenter">Forgot Password?</a>
             </div>
           </div>
           <div class="form-group">
@@ -117,6 +216,7 @@
           }
         </style>
         <br>
+        {% load socialaccount %}
         <a href="{% provider_login_url 'google' %}" class="google-login-btn d-flex justify-content-center ">
           <img src="{% static 'img/google_logo.png' %}" alt="Google Icon" class="google-icon">
         </a>
@@ -131,8 +231,6 @@
             text-decoration: none;
             border-radius: 560px;
           }
-
-       
 
           .google-icon {
             width: 50px;
@@ -174,7 +272,7 @@
       </div>
     </div>
     <div class="col-lg-6">
-
+      <!-- Added image -->
       <img
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a12343ddf6817b46a145815a50657abe2d18271441a9b0cdad0489742907d67?apiKey=04953d70f2ec47bc87e43c3e384dd0ac&"
         class="img-fluid" alt="Signup Image" />
@@ -186,6 +284,9 @@
   .container-fluid {
     background-color: #d9d9d9;
     padding: 50px;
+  }
+  #exampleModalLongTitle{
+    margin-left: 168px;
   }
 
   .forgot-password-link a {
@@ -263,4 +364,6 @@
     }
   }
 </style>
+<script></script>
+
 {% endblock %}

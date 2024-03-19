@@ -2,34 +2,38 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache
 from django.contrib import messages,auth
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 
-# Create your views here.
-@login_required
-def log_in(request):
+# Create your views here
+@never_cache
+def admin_login(request):
     if request.user.is_superuser:
         user = User.objects.all()
-        context = {'user' : user}
-        return render(request, 'dashboard.html', context)
+        return render(request, 'dashboard.html', {'user' : user})
     
     if request.method == 'POST':
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        sp_user = auth.authenticate(request, email = email, password = password)
+        sp_user = authenticate(request, username = username, password = password)
         if sp_user is not None and sp_user.is_superuser:
-            login(request, sp_user)
+            auth.login(request, sp_user)
             return redirect('dashboard')
         else:
             messages.error(request,'Sorry, only Admins are allowed.')
-            return redirect('log_in')
-
+            return redirect(admin_login)
+        
     return render(request, 'login.html')
-def log_out(request):
-    logout(request)
-    return redirect(log_in)
+def admin_logout(request):
+    auth.logout(request)
+    return redirect(admin_login)
     
 
 @never_cache
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    if request.user.is_superuser:
+        return render(request, 'dashboard.html')
+    else:
+        return redirect(admin_login)
+        

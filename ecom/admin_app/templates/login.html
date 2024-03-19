@@ -24,11 +24,11 @@
                 <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
                   <img src="{% static 'images/logos/w-logo.png' %}" width="180" alt="">
                 </a>
-                <form action="{% url 'login' %}" method="post">
+                <form action="{% url 'admin_login' %}" method="post">
                   {% csrf_token %}
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email</label>
-                    <input type="email" class="form-control" name = 'email' id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name = 'username' id="username" aria-describedby="emailHelp">
                   </div>
                   <div class="mb-4">
                     <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -38,13 +38,19 @@
                     <div class="form-check">
                       <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
                       <label class="form-check-label text-dark" for="flexCheckChecked">
-                        Remeber this Device
+                        Remember this Device
                       </label>
                     </div>
                   </div>
-                  <a href="{% url 'dashboard' %}" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" role = 'button'>Login</a>
-                  
+                  <button type="submit" class="btn btn-primary w-100 py-2 fs-4 mb-4 rounded-2">Login</button>
                 </form>
+                {% if messages %}
+                  <div class="messages text-center text-capitalize font-weight-bold">
+                    {% for message in messages %}
+                      <h5>! {{ message }}</h5>
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -54,6 +60,23 @@
   </div>
   <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
   <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const formInputs = document.querySelectorAll("input");
+      formInputs.forEach(input => {
+        input.addEventListener("keypress", function(e) {
+          if (e.key === "Enter") {
+            const index = Array.from(formInputs).indexOf(input);
+            const nextIndex = index + 1;
+            if (formInputs[nextIndex]) {
+              formInputs[nextIndex].focus();
+            }
+          }
+        });
+      });
+    });
+  </script>
 </body>
+
 
 </html>
