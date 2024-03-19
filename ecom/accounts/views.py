@@ -26,8 +26,7 @@ def register(request):
             email      = request.POST.get('email')
             password1  = request.POST.get('pass1')
             password2  = request.POST.get('pass2')
-            print(first_name)
-            print(password1)
+
             
             if not all([first_name, last_name, username, email, password1, password2]):
                 messages.error(request,'Please fill up all the fields.')
@@ -69,7 +68,7 @@ def register(request):
             if not any(char.isdigit() for char in password1):
                 messages.error(request, 'Password must contain at least one digit')
                 return redirect('register')
-            elif not re.match(r"^[\w\.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):  # Corrected regex pattern
+            elif not re.match(r"^[\w\.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email): 
                 messages.error(request, 'Please enter a valid email address')
                 return redirect('register')
             elif not validate_email(email):
@@ -105,6 +104,7 @@ def generate_otp_and_send_email(email):
         fail_silently=True
     )
     return otp, otp_generated_at
+
 def store_user_data_in_session(request, first_name, last_name, username, email, password, otp, otp_generated_at):
     request.session['user_data'] = {
         'first_name': first_name,
